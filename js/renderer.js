@@ -178,14 +178,62 @@ export function drawTextOutline(text, x, y, color = '#FFFFFF', outlineColor = '#
   ctx.fillText(text, x, y);
 }
 
-// Draw water
+// Draw water with reflection
 export function drawWater(waterY, time) {
   const screenWaterY = waterY - cameraY;
   if (screenWaterY > GAME_HEIGHT) return;
 
   const drawY = Math.max(0, Math.round(screenWaterY + shakeY));
+  const bodyY = drawY + 6;
+  const reflectionH = GAME_HEIGHT - bodyY;
 
-  // Water surface (wavy)
+  // Reflection: flip the scene above water into the area below
+  if (reflectionH > 0 && drawY > 0) {
+    // How many pixels above water to capture for reflection
+    const captureH = Math.min(drawY, reflectionH);
+
+    ctx.save();
+
+    // Clip to water body area
+    ctx.beginPath();
+    ctx.rect(0, bodyY, GAME_WIDTH, reflectionH);
+    ctx.clip();
+
+    // Draw flipped scene: scanline-by-scanline with wave distortion
+    for (let row = 0; row < captureH; row++) {
+      const srcY = drawY - 1 - row; // mirror from water line upward
+      if (srcY < 0) break;
+      const dstY = bodyY + row;
+
+      // Horizontal wave distortion
+      const waveOff = Math.sin(row * 0.08 + time * 0.04) * (2 + row * 0.02);
+
+      ctx.drawImage(
+        canvas,
+        0, srcY, GAME_WIDTH, 1,                           // source: 1px strip
+        Math.round(waveOff), dstY, GAME_WIDTH, 1           // dest: shifted strip
+      );
+    }
+
+    ctx.restore();
+
+    // Blue tint overlay on the reflection
+    ctx.fillStyle = 'rgba(20, 50, 140, 0.55)';
+    ctx.fillRect(0, bodyY, GAME_WIDTH, reflectionH);
+
+    // Fade the reflection: darker the further from surface
+    const fadeGrad = ctx.createLinearGradient(0, bodyY, 0, bodyY + reflectionH);
+    fadeGrad.addColorStop(0, 'rgba(15, 30, 80, 0.0)');
+    fadeGrad.addColorStop(1, 'rgba(15, 30, 80, 0.7)');
+    ctx.fillStyle = fadeGrad;
+    ctx.fillRect(0, bodyY, GAME_WIDTH, reflectionH);
+  } else if (reflectionH > 0) {
+    // Water is at the very top or above - just fill solid
+    ctx.fillStyle = 'rgba(34, 68, 170, 0.85)';
+    ctx.fillRect(0, bodyY, GAME_WIDTH, reflectionH);
+  }
+
+  // Water surface (wavy line)
   ctx.fillStyle = COLORS.waterSurface;
   for (let x = 0; x < GAME_WIDTH; x += 2) {
     const waveOffset = Math.sin(x * 0.1 + time * 0.05) * 3;
@@ -199,17 +247,12 @@ export function drawWater(waterY, time) {
     ctx.fillRect(x, drawY + waveOffset, 3, 1);
   }
 
-  // Water body
-  const bodyY = drawY + 6;
-  if (bodyY < GAME_HEIGHT) {
-    ctx.fillStyle = 'rgba(34, 68, 170, 0.85)';
-    ctx.fillRect(0, bodyY, GAME_WIDTH, GAME_HEIGHT - bodyY);
-
-    // Bubbles in water
-    ctx.fillStyle = 'rgba(100, 170, 255, 0.4)';
+  // Bubbles
+  if (reflectionH > 4) {
+    ctx.fillStyle = 'rgba(100, 170, 255, 0.3)';
     for (let i = 0; i < 10; i++) {
       const bx = (i * 37 + Math.sin(time * 0.02 + i) * 10) % GAME_WIDTH;
-      const by = bodyY + ((i * 23 + time * 0.3) % (GAME_HEIGHT - bodyY));
+      const by = bodyY + ((i * 23 + time * 0.3) % Math.max(1, reflectionH));
       const br = 1 + (i % 3);
       ctx.beginPath();
       ctx.arc(bx, by, br, 0, Math.PI * 2);
