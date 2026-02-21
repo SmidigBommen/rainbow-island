@@ -50,8 +50,7 @@ python3 -m http.server 8000
 
 ## Screenshots
 
-![Gameplay](screenshots/level.png)
-![Level Clear](screenshots/level-clear.png)
+<img src="screenshots/level.png" width="25%"> <img src="screenshots/level-clear.png" width="25%">
 
 ## Tech
 
