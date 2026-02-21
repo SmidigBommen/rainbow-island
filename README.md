@@ -50,6 +50,7 @@ python3 -m http.server 8000
 
 ## Screenshots
 
+![Gameplay](screenshots/level.png)
 ![Level Clear](screenshots/level-clear.png)
 
 ## Tech
