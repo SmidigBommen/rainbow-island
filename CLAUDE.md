@@ -28,9 +28,10 @@ js/
   rainbow.js        - Rainbow weapon: arc generation, platform, falling
   enemies.js        - Enemy types (walker, flyer, jumper, shooter) + projectiles
   items.js          - Item/power-up system with drops
-  level.js          - Level data (3 levels), tile generation, water system
-  ui.js             - HUD, title screen, menus, leaderboard display
+  level.js          - Level data (8 levels), tile generation, water system
+  ui.js             - HUD, title screen, level select, menus, leaderboard display
   leaderboard.js    - High score persistence with localStorage
+  progress.js       - Level unlock progression with localStorage persistence
   game.js           - Game state machine, main update/render loop, collision
 ```
 
@@ -42,9 +43,9 @@ js/
 - **Sprite generation**: All art is drawn via canvas API at startup, cached as offscreen canvases
 
 ### Game States
-`title` → `level_intro` → `playing` → `level_clear` → (next level or title)
+`title` → `level_select` → `level_intro` → `playing` → `level_clear` → (next level or level_select)
 `playing` → `paused` → `playing`
-`playing` → `game_over` → `enter_initials` → `leaderboard` → `title`
+`playing` → `game_over` → `enter_initials` → `leaderboard` → `level_select`
 
 ### Physics Constants (config.js)
 - Gravity: 0.42 px/frame², fall multiplier: 1.5x
@@ -70,6 +71,11 @@ python3 -m http.server 8000
 - Loosely coupled
 - MVP mindset
 - Do NOT add claude as co-author to the git commit messages
+- Always read CLAUDE.md before committing to respect project rules
+- Version number lives in `config.js` (`VERSION`) - bump it on notable changes
+- GitHub Pages deploys via `.github/workflows/deploy.yml` on push to main
+- Game is hosted at https://smidigbommen.github.io/rainbow-island/
+- Local server may already be running - check before starting a new one
 
 ### Adding a New Level
 1. Add a level config object in `js/level.js` following the existing pattern
