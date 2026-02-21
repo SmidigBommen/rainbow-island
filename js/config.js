@@ -1,5 +1,5 @@
 // Game configuration constants
-export const VERSION = '0.2.0';
+export const VERSION = '0.2.1';
 export const TILE_SIZE = 16;
 export const GAME_WIDTH = 320;
 export const GAME_HEIGHT = 480;

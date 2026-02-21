@@ -57,7 +57,15 @@ export function initGame() {
   stateTimer = 0;
 }
 
+let lastFrameTime = 0;
+
 export function gameLoop(timestamp) {
+  requestAnimationFrame(gameLoop);
+
+  const elapsed = timestamp - lastFrameTime;
+  if (elapsed < FRAME_TIME) return;
+  lastFrameTime = timestamp - (elapsed % FRAME_TIME);
+
   globalTime++;
   stateTimer++;
 
@@ -65,7 +73,6 @@ export function gameLoop(timestamp) {
   render();
 
   Input.clearFrameInput();
-  requestAnimationFrame(gameLoop);
 }
 
 function update() {
