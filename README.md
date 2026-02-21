@@ -6,12 +6,12 @@ Built with pure HTML5 Canvas and vanilla JavaScript - no frameworks, no dependen
 
 ## Play
 
-**[Play on GitHub Pages](#)** *(update link after deployment)*
+**[Play on GitHub Pages](https://smidigbommen.github.io/rainbow-island/)**
 
 Or run locally:
 ```bash
-git clone <repo-url>
-cd platformer2
+git clone git@github.com:SmidigBommen/rainbow-island.git
+cd rainbow-island
 python3 -m http.server 8000
 # Open http://localhost:8000
 ```
@@ -33,6 +33,7 @@ python3 -m http.server 8000
 - **Defeat enemies** by hitting them with rainbows - they drop fruit, diamonds, and power-ups
 - **Collect diamonds** for big bonus points
 - **Power-ups**: Speed shoes, rainbow potions (extra rainbows), stars (screen clear), hearts (extra life)
+- **Level select**: Beat levels to unlock the next island
 - **Leaderboard**: Enter your initials when you get a high score
 
 ## Features
@@ -42,7 +43,8 @@ python3 -m http.server 8000
 - Procedurally generated pixel art sprites
 - Synthesized retro sound effects (Web Audio API)
 - Persistent high score leaderboard (localStorage)
-- 3 levels with increasing difficulty
+- 8 levels across 4 island themes with unlock progression
+- Level select screen with difficulty indicators
 - Particle effects and screen shake
 - Works on any modern browser, deployable to GitHub Pages
 
@@ -54,7 +56,7 @@ python3 -m http.server 8000
 
 - **Zero dependencies** - pure HTML5 Canvas + vanilla JS
 - **ES modules** - clean code organization, no bundler needed
-- **~3,700 lines** of JavaScript across 16 modules
+- **~4,800 lines** of JavaScript across 17 modules
 - **No assets to load** - all sprites and audio generated at runtime
 
 ## License
