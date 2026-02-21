@@ -50,7 +50,7 @@ python3 -m http.server 8000
 
 ## Screenshots
 
-*(Add screenshots here)*
+![Level Clear](screenshots/level-clear.png)
 
 ## Tech
 
